@@ -20,7 +20,7 @@ mkdir build/ && cd build/
 
 Build the project
 ```
-cmake ..
+cmake ../
 make
 ```
 
