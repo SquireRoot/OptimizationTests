@@ -5,7 +5,7 @@ Evan Newman
 
 #include <iostream>
 
-#include <Core> // Eigen stuff
+#include <eigen3/Eigen/Core> // Eigen stuff
 
 #include "MatrixMultiplication/MatrixMultiply.h"
 

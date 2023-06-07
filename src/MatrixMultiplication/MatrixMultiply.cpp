@@ -11,12 +11,14 @@ Evan Newman
 #include <cstdint>
 
 // Libraries
-#include <Core> // Eigen stuff
+#include <eigen3/Eigen/Core> // Eigen stuff
+// #include <blis/cblas.h>
 
 // Local
 #include "MatrixMultiplySimple.h"
 #include "MatrixMultiplyTiled.h"
 #include "MatrixMultiplyCacheOblivious.h"
+#include "MatrixMultiplyFastest.h"
 
 #include "Util/Timer.h"
 
@@ -24,13 +26,14 @@ namespace OptimizationTests {
     namespace MatrixMultiply {
 
         void RunMatrixMultiplyTests() {
-            std::cout << "-------- MatrixMultiply Tests --------\n";
+            std::cout << "-------- MatrixMultiply Tests --------" << std::endl
+                      << "Function Name, Min (ms), Mean (ms), Max (ms)" << std::endl;
 
             uint64_t dim1 = 750; // rows of c and a
             uint64_t dim2 = 750; // columns of c and b
             uint64_t dim3 = 750; // columns of a and rows of b
 
-            const int num_iter = 1;
+            const int num_iter = 50;
 
             Eigen::MatrixXf a(dim1, dim3);
             Eigen::MatrixXf b(dim3, dim2);
@@ -45,30 +48,37 @@ namespace OptimizationTests {
             // run and time eigen
             Eigen::MatrixXf c_eigen(dim1, dim2);
 
-            timer.Start();
             for (int i = 0; i < num_iter; i++) {
+                timer.Start();
                 c_eigen = (a*b).eval();
-                a.operator*(b);
+                timer.Stop();
             }
-            double time_eigen = timer.Stop()/num_iter;
-            std::cout << "Eigen:   \t" << time_eigen << "ms\n";
+            std::cout << "Eigen: " << timer.StatsString() << std::endl;
 
             auto RunTest = [&](auto func, std::string label) {
                 c.setZero();
 
-                timer.Start();
+                double min = std::numeric_limits<double>::max();
+                double max = 0;
+                double mean = 0;
+
+                timer.Reset();
                 for (int i = 0; i < num_iter; i++) {
+                    timer.Start();
                     func(a, b, c);
+                    timer.Stop();
                 }
-                double dt = timer.Stop()/num_iter;
-                std::cout << label << ":  " << dt << "ms, result ";
+
+                std::cout << label << ": " << timer.StatsString() << ", result ";
 
                 // test output
                 if (c.isApprox(c_eigen)) {
-                    std::cout << "ok\n";
+                    std::cout << "ok";
                 } else {
-                    std::cout << "error!\n";
+                    std::cout << "error!";
                 }
+
+                std::cout << std::endl;
             };
 
             /* ----- Test the functions ----- */
@@ -78,8 +88,10 @@ namespace OptimizationTests {
             RunTest(MatMultTiled, "MatMultTiled");
             RunTest(MatMultTiledOptimized, "MatMultTiledOptimized");
 
-            RunTest(MatMultCacheOblivious, "MatMultCacheOblivious");
-            RunTest(MatMultCacheObliviousOptimized, "MatMultCacheObliviousOptimized");
+            // RunTest(MatMultCacheOblivious, "MatMultCacheOblivious");
+            // RunTest(MatMultCacheObliviousOptimized, "MatMultCacheObliviousOptimized");
+
+            // RunTest(MatMultFastest, "MatMultFastest");
         }
         
     } // namespace MatrixMultiply

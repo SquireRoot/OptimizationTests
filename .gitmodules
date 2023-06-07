@@ -2,3 +2,6 @@
 	path = third_party/Eigen
 	url = git@gitlab.com:libeigen/eigen.git
 	branch = 3.4
+[submodule "third_party/blis"]
+	path = third_party/blis
+	url = https://github.com/flame/blis.git

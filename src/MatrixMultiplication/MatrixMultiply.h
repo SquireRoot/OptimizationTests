@@ -6,7 +6,7 @@ Evan Newman
 #ifndef MATRIX_MULTIPLY_H
 #define MATRIX_MULTIPLY_H
 
-#include <Core> // Eigen stuff
+#include <eigen3/Eigen/Core> // Eigen stuff
 
 namespace OptimizationTests {
     namespace MatrixMultiply {

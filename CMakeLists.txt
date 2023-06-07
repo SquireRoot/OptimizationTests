@@ -12,13 +12,14 @@ set(SRC_DIR ${PROJECT_SOURCE_DIR}/src)
 file(GLOB_RECURSE SOURCE_FILES ${SRC_DIR}/*.cpp)
 file(GLOB_RECURSE HEADER_FILES ${SRC_DIR}/*.h)
 
-include(CTest)
-enable_testing()
+include_directories(${SRC_DIR} ${PROJECT_SOURCE_DIR}/ext/include)
+link_directories(${PROJECT_SOURCE_DIR}/lib)
 
-include_directories(${SRC_DIR} ${PROJECT_SOURCE_DIR}/third_party/Eigen/Eigen)
 add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES})
-# target_link_libraries(${PROJECT_NAME} ${LIBS})
 
-set(CPACK_PROJECT_NAME ${PROJECT_NAME})
-set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
-include(CPack)
+# target_link_libraries(${PROJECT_NAME} ${LIBS})
+target_compile_options(${PROJECT_NAME} PRIVATE -O3 -march=native)
+
+# set(CPACK_PROJECT_NAME ${PROJECT_NAME})
+# set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
+# include(CPack)

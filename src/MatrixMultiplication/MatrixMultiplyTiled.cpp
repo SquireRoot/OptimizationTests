@@ -3,7 +3,7 @@ MatrixMultiplyTiled.cpp
 Evan Newman
 */
 
-#include <Core>
+#include <eigen3/Eigen/Core>
 
 namespace OptimizationTests {
     namespace MatrixMultiply {
