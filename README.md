@@ -7,10 +7,9 @@ git clone git@github.com:SquireRoot/OptimizationTests.git
 cd OptimizationTests/
 ```
 
-Grab the submodules
+This project depends on blis, eigen, and fftw. If you are on a linux system, run the following script to build and install all dependencies to the ext/ folder
 ```
-git submodule init
-git submodule update
+./BuildDependencies.sh
 ```
 
 Create a build Directory
